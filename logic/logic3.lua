@@ -5,21 +5,14 @@ local kChar1 = string.byte('1');
 local kCharDash = string.byte('-');
 
 function signalFromInt(x, size)
-	local s0 = 0;
-	local s1 = 1;
-
-	for i=0,size-1 do
-		local bi = (x >> i) & 1;
-		if(bi == 0) then
-			s0 = s0 | (1 << i);
-		else
-			s1 = s1 | (1 << i);
-		end
-	end
-
-	return { s0, s1 };
+	local mask = (1 << size) - 1;
+	x = x & mask;
+	return { mask - x, x };
 end
 
+-- "0" = 01
+-- "1" = 10
+-- "-" = 11
 function signalFromString(str)
 	local size = str:len();
 	local bytes = { str:byte(1, size) };
@@ -42,8 +35,21 @@ function signalFromString(str)
 	return { s0, s1 };
 end
 
-function signalUndefined()
-	local max = (1 << LUA_INTEGER) - 1;
+function signalToInt(x, size)
+	local mask = (1 << size) - 1;
+	local x0 = x[1] & mask;
+	local x1 = x[2] & mask;
+	if((x0 & x1) ~= 0) then
+		return "U";
+	elseif((x0 | x1) == 0) then
+		return "-";
+	end
+	return x1;
+end
+
+function signalUndefined(size)
+	size = size or LUA_INTEGER;
+	local max = (1 << size) - 1;
 	return { max, max };
 end
 
@@ -166,4 +172,28 @@ function norn(...)
 		r1 = r1 | a[2];
 	end
 	return { r1, r0 };
+end
+
+function index(x, i)
+	local shift = i - 1;
+	local x0 = (x[1] >> shift) & 1;
+	local x1 = (x[2] >> shift) & 1;
+	return { x0, x1 };
+end
+
+function concat(...)
+	local args = {...};
+
+	local x0 = 0;
+	local x1 = 0;
+	for i=1,#args do
+		local ai = args[i];
+		local ai0 = ai[1] & 1;
+		local ai1 = ai[2] & 1;
+		local shift = i - 1;
+
+		x0 = x0 | (ai0 << shift);
+		x1 = x1 | (ai1 << shift);
+	end
+	return { x0, x1 };
 end
