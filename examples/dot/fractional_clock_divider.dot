@@ -1,0 +1,29 @@
+digraph "Fractional Clock Divider" {
+graph [ ranksep = 2; rankdir = LR; ]
+subgraph inputs { rank = source;
+input1 [ shape = rarrow, label = "i_clk"];
+input2 [ shape = rarrow, label = "i_rst"];
+}
+subgraph outputs { rank = sink;
+output1 [ shape = rarrow, label = "o_pix_stb"];
+}
+subgraph nodes {
+n2 [ shape = record, label = "{{<i1>}|[9]|{<o>}}"];
+n3 [ shape = record, label = "{{<i1> a|<i2> b|<i3> cin}|<o>}|adder,8"];
+n4 [ shape = record, label = "{{<i1> next|<i2> clk|<i3> rst_n|<i4> set_n}|<o>}|register,8"];
+n6 [ shape = record, label = "{{<i1>}|<o> not}"];
+n8 [ shape = record, label = "<o> 1|const,1"];
+n9 [ shape = record, label = "<o> 64|const,8"];
+n10 [ shape = record, label = "<o> 0|const,1"];
+}
+n2:o:e -> output1:w
+n3:o:e -> n2:i1:w
+n4:o:e -> n3:i1:w
+n3:o:e -> n4:i1:w
+input1:e -> n4:i2:w
+n6:o:e -> n4:i3:w
+input2:e -> n6:i1:w
+n8:o:e -> n4:i4:w
+n9:o:e -> n3:i2:w
+n10:o:e -> n3:i3:w
+}

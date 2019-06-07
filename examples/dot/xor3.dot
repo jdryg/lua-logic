@@ -1,0 +1,40 @@
+digraph "Xor3" {
+graph [ ranksep = 2; rankdir = LR; ]
+subgraph inputs { rank = source;
+input1 [ shape = rarrow, label = "a"];
+input2 [ shape = rarrow, label = "b"];
+input3 [ shape = rarrow, label = "c"];
+}
+subgraph outputs { rank = sink;
+output1 [ shape = rarrow, label = "o"];
+}
+subgraph nodes {
+n2 [ shape = record, label = "{{<i1>|<i2>}|<o> or}"];
+n3 [ shape = record, label = "{{<i1>|<i2>}|<o> and}"];
+n4 [ shape = record, label = "{{<i1>|<i2>}|<o> or}"];
+n5 [ shape = record, label = "{{<i1>|<i2>}|<o> and}"];
+n7 [ shape = record, label = "{{<i1>}|<o> not}"];
+n9 [ shape = record, label = "{{<i1>|<i2>}|<o> and}"];
+n10 [ shape = record, label = "{{<i1>}|<o> not}"];
+n11 [ shape = record, label = "{{<i1>}|<o> not}"];
+n13 [ shape = record, label = "{{<i1>|<i2>}|<o> and}"];
+n14 [ shape = record, label = "{{<i1>}|<o> not}"];
+}
+n2:o:e -> output1:w
+n3:o:e -> n2:i1:w
+n4:o:e -> n3:i1:w
+n5:o:e -> n4:i1:w
+input1:e -> n5:i1:w
+n7:o:e -> n5:i2:w
+input2:e -> n7:i1:w
+n9:o:e -> n4:i2:w
+n10:o:e -> n9:i1:w
+input1:e -> n10:i1:w
+input2:e -> n9:i2:w
+n11:o:e -> n3:i2:w
+input3:e -> n11:i1:w
+n13:o:e -> n2:i2:w
+n14:o:e -> n13:i1:w
+n4:o:e -> n14:i1:w
+input3:e -> n13:i2:w
+}
