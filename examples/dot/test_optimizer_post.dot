@@ -1,0 +1,27 @@
+digraph "Test Optimizer" {
+graph [ ranksep = 2; rankdir = LR; ]
+subgraph inputs { rank = source;
+input1 [ shape = rarrow, label = "a"];
+input2 [ shape = rarrow, label = "b"];
+}
+subgraph outputs { rank = sink;
+output1 [ shape = rarrow, label = "nand"];
+output2 [ shape = rarrow, label = "nor"];
+output3 [ shape = rarrow, label = "zero"];
+output4 [ shape = rarrow, label = "one"];
+}
+subgraph nodes {
+n2 [ shape = record, label = "{{<i1>|<i2>}|<o> nand}"];
+n6 [ shape = record, label = "{{<i1>|<i2>}|<o> nor}"];
+n8 [ shape = record, label = "<o> 0|const,1"];
+n10 [ shape = record, label = "<o> 1|const,1"];
+}
+n2:o:e -> output1:w
+input1:e -> n2:i1:w
+input2:e -> n2:i2:w
+n6:o:e -> output2:w
+input1:e -> n6:i1:w
+input2:e -> n6:i2:w
+n8:o:e -> output3:w
+n10:o:e -> output4:w
+}

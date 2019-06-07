@@ -1,5 +1,6 @@
 require("hdl/hdl");
 require("hdl/dot_generator");
+require("hdl/optimizer");
 
 Xor = module[[Xor]](
 function ()
@@ -47,4 +48,22 @@ end);
 
 local dotfile = io.open("examples/dot/fractional_clock_divider.dot", "w");
 dotfile:write(generate_dot_file(FractionalClockDiv));
+dotfile:close();
+
+TestOptimizer = module[[Test Optimizer]](
+function ()
+	a = input(bit);
+	b = input(bit);
+
+	nand = output(~(a & b));
+	nor = output(~(a | b));
+	zero = output(a & 0);
+	one = output(b | 1);
+end);
+
+local dotfile = io.open("examples/dot/test_optimizer_pre.dot", "w");
+dotfile:write(generate_dot_file(TestOptimizer));
+dotfile:close();
+local dotfile = io.open("examples/dot/test_optimizer_post.dot", "w");
+dotfile:write(generate_dot_file(hdlProcessModule(TestOptimizer)));
 dotfile:close();

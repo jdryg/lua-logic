@@ -906,33 +906,6 @@ function check_same_size(node1, node2)
 	check_size(node1, node2.size)
 end
 
--- Calculates a new comparison operator when operands in a comparator switch places.
-function swapComparisonOp(op)
-	if(op == "lt")     then return "gt";
-	elseif(op == "le") then return "ge";
-	elseif(op == "gt") then return "lt";
-	elseif(op == "ge") then return "le";
-	end
-
-	return op;
-end
-
--- TODO: Check if this works correctly (probably not for large/negative integers
--- because it needs unsigned comparison to handle all possible values)
-function compareConstants(op, l, r)
-	assert(isInteger(l) and isInteger(r), "Expected integers");
-
-	if(op == 'eq')      then return ((l ~ r) == 0) and 1 or 0;
-	elseif(op == 'ne')  then return ((l ~ r) ~= 0) and 1 or 0;
-	elseif(op == 'lt')  then return (l < r)  and 1 or 0;
-	elseif(op == 'le')  then return (l <= r) and 1 or 0;
-	elseif(op == 'gt')  then return (l > r)  and 1 or 0;
-	elseif(op == 'ge')  then return (l >= r) and 1 or 0;
-	end
-
-	return 0;
-end
-
 -- NodeCollector
 -- NOTE: Walks the graph and assigns unique IDs to every node it encounters.
 NodeCollector = class("NodeCollector");
