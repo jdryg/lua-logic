@@ -67,3 +67,17 @@ dotfile:close();
 local dotfile = io.open("examples/dot/test_optimizer_post.dot", "w");
 dotfile:write(generate_dot_file(hdlProcessModule(TestOptimizer)));
 dotfile:close();
+
+TestIndexSliceConcat = module[[Test Index/Slice/Concat]](
+function ()
+	a = input(bit[4]);
+	b = input(bit[8]);
+
+	a12 = output(a(1,3));
+	b5 = output(b[5]);
+	a_b = output(a .. b);
+end);
+
+local dotfile = io.open("examples/dot/test_index_slice_concat.dot", "w");
+dotfile:write(generate_dot_file(TestIndexSliceConcat));
+dotfile:close();
