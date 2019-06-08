@@ -1,0 +1,24 @@
+digraph "Test Index/Slice/Concat" {
+graph [ ranksep = 2; rankdir = LR; ]
+subgraph inputs { rank = source;
+input1 [ shape = rarrow, label = "a,4"];
+input2 [ shape = rarrow, label = "b,8"];
+}
+subgraph outputs { rank = sink;
+output1 [ shape = rarrow, label = "a12,2"];
+output2 [ shape = rarrow, label = "b5"];
+output3 [ shape = rarrow, label = "a_b,12"];
+}
+subgraph nodes {
+n2 [ shape = record, label = "{{<i1>}|[1:2]|{<o>}}|bit[2]"];
+n5 [ shape = record, label = "{{<i1>}|[5]|{<o>}}"];
+n8 [ shape = record, label = "{{<i1>|<i2>}|<o>}|bit[12]"];
+}
+n2:o:e -> output1:w
+input1:e -> n2:i1:w
+n5:o:e -> output2:w
+input2:e -> n5:i1:w
+n8:o:e -> output3:w
+input1:e -> n8:i1:w
+input2:e -> n8:i2:w
+}
